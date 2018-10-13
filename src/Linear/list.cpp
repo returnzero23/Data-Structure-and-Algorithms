@@ -58,17 +58,47 @@ public:
         }
     };
 
-    void DeleteByIndex(const int Index){
+    void Reversal(){
+        Node* PreNode = nullptr;            //交换时的第一个节点
+        Node* IndexNode = m_head->nextNode; //交换时的第二个节点
+        Node* NextNode = nullptr;           //交换时的第三个节点
 
+        if(IndexNode)
+            NextNode = IndexNode->nextNode;
+
+        while(IndexNode){
+
+            //如果是第一个节点第一个节点的 nextNode 为空
+            if(m_head->nextNode == IndexNode){
+                IndexNode->nextNode = nullptr;
+            }
+            
+            if(NextNode){
+                PreNode = IndexNode;
+                IndexNode = NextNode;
+                NextNode = NextNode->nextNode;
+            }else{
+                m_head->nextNode = IndexNode;
+                break;
+            }
+
+            IndexNode->nextNode = PreNode;
+        }
+
+    }
+
+    void DeleteByIndex(const int Index){
+        //todo
     };
 
-    void PrintList(){
-        Node* IndexNode = m_head->nextNode;
-        std::cout << "the list has " << m_length << " elements" << std::endl;
+    friend std::ostream& operator<< (std::ostream& os,List& list){
+        Node* IndexNode = list.m_head->nextNode;
+        std::cout << "the list has " << list.m_length << " elements" << std::endl;
         while(IndexNode){
             std::cout << IndexNode->data << std::endl;
             IndexNode = IndexNode->nextNode;
         }
+        return os;
     };
 
 private:
@@ -79,15 +109,27 @@ private:
 int main(){
     List list;
     list.Add(1);
+    std::cout << list << std::endl;
+
+    std::cout << "Reversal" << std::endl;
+    list.Reversal();
+    std::cout << list << std::endl;
+    
     list.Add(1);
     list.Add(2);
     list.Add(3);
     list.Add(4);
     list.Add(4);
-    list.PrintList();
+    std::cout << list << std::endl;
+
+    std::cout << "Reversal" << std::endl;
+    list.Reversal();
+    std::cout << list << std::endl;
+
     list.DeleteByElement(1);
-    list.PrintList();
+    std::cout << list << std::endl;
+
     list.DeleteByElement(4);
-    list.PrintList();
+    std::cout << list << std::endl;
 
 }
