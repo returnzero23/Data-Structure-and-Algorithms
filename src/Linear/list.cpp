@@ -2,9 +2,9 @@
 
 class List{
     struct Node{
-        Node(const int data):
+        Node(const int data, Node* nextNode = nullptr):
             data(data),
-            nextNode(nullptr)
+            nextNode(nextNode)
         {};
 
         Node():
@@ -20,14 +20,14 @@ public:
         m_head = m_lastNode = new Node;
     }
     ~List(){
-        Node* IndexNode = m_head;
-        while(IndexNode->nextNode){
-            Node* NextNode = IndexNode->nextNode;
-            delete IndexNode;
-            IndexNode = NextNode;
+        Node* indexNode = m_head;
+        while(indexNode->nextNode){
+            Node* nextNode = indexNode->nextNode;
+            delete indexNode;
+            indexNode = nextNode;
         }
-        delete IndexNode;
-        IndexNode = nullptr;
+        delete indexNode;
+        indexNode = nullptr;
         m_length = 0;
     };
 
@@ -36,6 +36,21 @@ public:
         m_lastNode = m_lastNode->nextNode;
         m_length++;
     };
+
+    bool Insert(const int index, const int data){
+        if(index > m_length) return false;
+        int i = index;
+        Node* preNode = m_head;
+        Node* indexNode = m_head->nextNode;
+        while(i--){
+            preNode = preNode->nextNode;
+            indexNode = indexNode->nextNode;
+        }
+
+        preNode->nextNode = new Node(data,indexNode);
+        m_length++;
+        return true;
+    }
 
     void DeleteByElement(const int data){
         Node* IndexNode = m_head->nextNode; // head 的nextNode 可能为空
@@ -114,12 +129,16 @@ int main(){
     std::cout << "Reversal" << std::endl;
     list.Reversal();
     std::cout << list << std::endl;
-    
+
     list.Add(1);
     list.Add(2);
     list.Add(3);
     list.Add(4);
     list.Add(4);
+    std::cout << list << std::endl;
+
+    std::cout << "Insert" << std::endl;
+    list.Insert(4,100);
     std::cout << list << std::endl;
 
     std::cout << "Reversal" << std::endl;
