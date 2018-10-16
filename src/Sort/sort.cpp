@@ -59,7 +59,7 @@ int main(){
         //std::cout << Array1[i] << ",";
     }
     std::cout << std::endl;
-    std::cout<< "Bubble sort Running time is: "<<static_cast<double>(end_time-start_time)/CLOCKS_PER_SEC*1000<<"ms"<<std::endl;
+    std::cout<< SIZE << " Elements Bubble sort Running time is: "<<static_cast<double>(end_time-start_time)/CLOCKS_PER_SEC*1000<<"ms"<<std::endl;
 
     int Array2[SIZE];
     for(size_t i = 0; i < SIZE; i++)
@@ -71,6 +71,6 @@ int main(){
         //std::cout << Array2[i] << ",";
     }
     std::cout << std::endl;
-    std::cout<< "Insertion Sort Running time is: "<<static_cast<double>(end_time-start_time)/CLOCKS_PER_SEC*1000<<"ms"<<std::endl;
+    std::cout<< SIZE << " Elements Insertion Sort Running time is: "<<static_cast<double>(end_time-start_time)/CLOCKS_PER_SEC*1000<<"ms"<<std::endl;
     return 0;
 }
