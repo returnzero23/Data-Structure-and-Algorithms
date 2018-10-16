@@ -1,4 +1,6 @@
 #include <iostream>
+#include <time.h>
+#include <stdlib.h>
 
 template<typename T>
 void BubbleSort(T* array, const int size){
@@ -42,17 +44,33 @@ void SelectionSort(T* Array, const int size){
     
 };
 
-int main(){
-    int Array1[] = {1,2,3,43,1,4,3,1,34,4,5};
-    BubbleSort(Array1,11);
-    for(int i = 0 ; i < 11 ; i++){
-        std::cout << Array1[i] << std::endl;
-    }
+#define SIZE 100000
 
-    int Array2[] = {1,2,3,43,1,4,3,1,34,4,5};
-    InsertionSort(Array2,11);
-    for(int i = 0 ; i < 11 ; i++){
-        std::cout << Array2[i] << std::endl;
+int main(){
+    srand((unsigned)time(NULL));
+    int Array1[SIZE];
+    for(size_t i = 0; i < SIZE; i++)
+        Array1[i] = rand()%200;
+
+    clock_t start_time=clock();
+    BubbleSort(Array1,SIZE);
+    clock_t end_time=clock();
+    for(int i = 0 ; i < SIZE ; i++){
+        //std::cout << Array1[i] << ",";
     }
+    std::cout << std::endl;
+    std::cout<< "Bubble sort Running time is: "<<static_cast<double>(end_time-start_time)/CLOCKS_PER_SEC*1000<<"ms"<<std::endl;
+
+    int Array2[SIZE];
+    for(size_t i = 0; i < SIZE; i++)
+        Array2[i] = rand()%200;
+    start_time=clock();
+    InsertionSort(Array2,SIZE);
+    end_time=clock();
+    for(int i = 0 ; i < SIZE ; i++){
+        //std::cout << Array2[i] << ",";
+    }
+    std::cout << std::endl;
+    std::cout<< "Insertion Sort Running time is: "<<static_cast<double>(end_time-start_time)/CLOCKS_PER_SEC*1000<<"ms"<<std::endl;
     return 0;
 }
