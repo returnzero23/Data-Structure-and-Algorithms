@@ -104,16 +104,58 @@ void MergeSort(T* Array, const int size){
     MergeSortInner(Array,0,size-1);
 };
 
+template<typename T>
+int Partition(T* Array, const int p, const int r){
+    if(p == r) return r;
+    const int data = Array[r];
+    int i = p;
+    int j = p;
+    for(; j <= r;j++)
+    {
+        if(Array[j] <= data){
+            const int temp = Array[i];
+            Array[i] = Array[j];
+            Array[j] = temp;
+            i++;
+        }
+    }
+    return --i;
+};
+
+template<typename T>
+void QuickSortInner(T* Array, const int p, const int r){
+    const int mid = Partition(Array,p,r);
+    if(p < mid-1)
+        QuickSortInner(Array,p,mid-1);
+    if(mid+1 < r)
+        QuickSortInner(Array,mid+1,r);
+};
+
+template<typename T>
+void QuickSort(T* Array, const int size){
+    QuickSortInner(Array, 0, size - 1);
+}
+
 
 
 #define SIZE 100000
 
 int main(){
+
     srand((unsigned)time(NULL));
     int Array1[SIZE];
-    for(size_t i = 0; i < SIZE; i++)
-        Array1[i] = rand()%200;
+    int Array2[SIZE];
+    int Array3[SIZE];
+    int Array4[SIZE];
+    for(size_t i = 0; i < SIZE; i++){
+        const int randomData = rand()%200;
+        Array1[i] = randomData;
+        Array2[i] = randomData;
+        Array3[i] = randomData;
+        Array4[i] = randomData;
+    }
 
+    //冒泡排序
     clock_t start_time=clock();
     BubbleSort(Array1,SIZE);
     clock_t end_time=clock();
@@ -123,9 +165,7 @@ int main(){
     std::cout << std::endl;
     std::cout<< SIZE << " Elements Bubble sort Running time is: "<<static_cast<double>(end_time-start_time)/CLOCKS_PER_SEC*1000<<"ms"<<std::endl;
 
-    int Array2[SIZE];
-    for(size_t i = 0; i < SIZE; i++)
-        Array2[i] = rand()%200;
+    //插入排序
     start_time=clock();
     InsertionSort(Array2,SIZE);
     end_time=clock();
@@ -135,9 +175,7 @@ int main(){
     std::cout << std::endl;
     std::cout<< SIZE << " Elements Insertion Sort Running time is: "<<static_cast<double>(end_time-start_time)/CLOCKS_PER_SEC*1000<<"ms"<<std::endl;
 
-    int Array3[SIZE];
-    for(size_t i = 0; i < SIZE; i++)
-        Array3[i] = rand()%200;
+    //归并排序
     start_time=clock();
     MergeSort(Array3,SIZE);
     end_time=clock();
@@ -146,5 +184,16 @@ int main(){
     }
     std::cout << std::endl;
     std::cout<< SIZE << " Elements Merge Sort Running time is: "<<static_cast<double>(end_time-start_time)/CLOCKS_PER_SEC*1000<<"ms"<<std::endl;
+    
+    //快速排序
+    start_time=clock();
+    QuickSort(Array4,SIZE);
+    end_time=clock();
+    for(int i = 50 ; i < 100 ; i++){
+        //std::cout << Array4[i] << ",";
+    }
+    std::cout << std::endl;
+    std::cout<< SIZE << " Elements Quick Sort Running time is: "<<static_cast<double>(end_time-start_time)/CLOCKS_PER_SEC*1000<<"ms"<<std::endl;
+
     return 0;
 }
