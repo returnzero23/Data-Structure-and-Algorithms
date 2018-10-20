@@ -46,7 +46,7 @@ void SelectionSort(T* Array, const int size){
 
 template<typename T>
 void Merge(T* array, const int indexA, const int sizeA, const int indexB, const int sizeB){
-    int* temp =new int[sizeA+sizeB];
+    int* temp = new int[sizeA+sizeB];
     int i = 0;
     int j = 0;
     int k = 0;
@@ -77,6 +77,9 @@ void Merge(T* array, const int indexA, const int sizeA, const int indexB, const 
     for(int i = 0; i < size; i++){
         array[indexA + i] = temp[i];
     };
+
+    delete[] temp;
+    temp = nullptr;
 }
 
 template<typename T>
@@ -136,13 +139,69 @@ void QuickSort(T* Array, const int size){
     QuickSortInner(Array, 0, size - 1);
 }
 
+template<typename T>
+int Max(T* Array, const int size){
+    int max = 0;
+    for(size_t i = 0; i < size; i++)
+    {
+        if(Array[i] > max){
+            max = Array[i];
+        }
+    }
+    return max;
+}
 
+template<typename T>
+void CountingSort(T* Array, const int size){
+    const int maxCapacity = Max(Array,size) + 1;
+    int* countArray = new int[maxCapacity];
+    for(size_t i = 0; i < maxCapacity; i++)
+    {
+        countArray[i] = 0;
+    }
 
-#define SIZE 100000
+    for(size_t i = 0; i < size; i++)
+    {
+        countArray[Array[i]]++;
+    }
+
+    for(size_t i = 1; i < maxCapacity; i++)
+    {
+        countArray[i] = countArray[i-1] + countArray[i];
+    }
+
+    int* sortArray = new int[size];
+    for(size_t i = 0; i < size; i++)
+    { 
+        sortArray[i] = 0;
+    }
+
+    for(int i = size - 1; i >= 0; i--)
+    {
+        sortArray[countArray[Array[i]] - 1] = Array[i];
+        countArray[Array[i]]--;
+    }
+    
+    for(size_t i = 0; i < size; i++)
+    {
+        Array[i] = sortArray[i];
+    }
+    delete [] sortArray;
+    sortArray = nullptr;
+    delete [] countArray;
+    countArray = nullptr;
+}
+
+#define SIZE1 10000
+
+#define SIZE 10000
+
+//const unsigned int SIZE1 = 2000000;
 
 int main(){
 
     srand((unsigned)time(NULL));
+
     int Array1[SIZE];
     int Array2[SIZE];
     int Array3[SIZE];
@@ -194,6 +253,19 @@ int main(){
     }
     std::cout << std::endl;
     std::cout<< SIZE << " Elements Quick Sort Running time is: "<<static_cast<double>(end_time-start_time)/CLOCKS_PER_SEC*1000<<"ms"<<std::endl;
+    
+    int Array5[SIZE1];
+    for(size_t i = 0; i < SIZE1; i++){
+        const int randomData = rand()%100;
+        Array5[i] = randomData;
+    }
+
+    start_time=clock();
+    CountingSort(Array5,SIZE1);
+    end_time=clock();
+    std::cout << std::endl;
+    std::cout<< SIZE1 << " Elements Counting Sort Running time is: "<<static_cast<double>(end_time-start_time)/CLOCKS_PER_SEC*1000<<"ms"<<std::endl;
+
 
     return 0;
 }
