@@ -23,7 +23,7 @@ private:
 private:
     template< typename U>
     class Node {
-        T data;
+        U data;
         Node* NextNode = nullptr;
 
     };
