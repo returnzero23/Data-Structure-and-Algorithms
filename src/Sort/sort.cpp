@@ -192,9 +192,36 @@ void CountingSort(T* Array, const int size){
     countArray = nullptr;
 }
 
-#define SIZE1 10000
+template<typename T>
+void YYInsertSort(T* array, int size){
+    for(size_t i = 1; i < size; i++)
+    {
+        int temp = array[i];
+        
+        size_t j = 0;
+        for(j = i - 1; j >= 0; j--)
+        {
+            if(temp < array[j]){
+                array[j+1] = array[j];
+            }else{
+                j--;
+                break;
+            }
+        }
+        array[++j] = temp;
 
-#define SIZE 10000
+        
+        while(temp > array[i]){
+            array[i-1] = array[i];
+            i--;
+        }
+        array[i] = temp;
+    }   
+}
+
+#define SIZE1 1000
+
+#define SIZE 1000
 
 //const unsigned int SIZE1 = 2000000;
 
@@ -206,12 +233,14 @@ int main(){
     int Array2[SIZE];
     int Array3[SIZE];
     int Array4[SIZE];
+    int Array6[SIZE];
     for(size_t i = 0; i < SIZE; i++){
         const int randomData = rand()%200;
         Array1[i] = randomData;
         Array2[i] = randomData;
         Array3[i] = randomData;
         Array4[i] = randomData;
+        Array6[i] = randomData;
     }
 
     //冒泡排序
@@ -233,6 +262,15 @@ int main(){
     }
     std::cout << std::endl;
     std::cout<< SIZE << " Elements Insertion Sort Running time is: "<<static_cast<double>(end_time-start_time)/CLOCKS_PER_SEC*1000<<"ms"<<std::endl;
+
+    start_time=clock();
+    YYInsertSort(Array6,SIZE);
+    end_time=clock();
+    for(int i = 0 ; i < SIZE ; i++){
+        //std::cout << Array2[i] << ",";
+    }
+    std::cout << std::endl;
+    std::cout<< SIZE << " Elements YYInsertion Sort Running time is: "<<static_cast<double>(end_time-start_time)/CLOCKS_PER_SEC*1000<<"ms"<<std::endl;
 
     //归并排序
     start_time=clock();
