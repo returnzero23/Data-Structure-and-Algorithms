@@ -8,7 +8,8 @@ using namespace std;
 template <typename Comparable>
 class BinarySearchTree
 {
-  public:
+public:
+    struct BinaryNode;
     BinarySearchTree( ) : root{ nullptr }
     {
     }
@@ -118,17 +119,17 @@ class BinarySearchTree
     /**
      * Insert x into the tree; duplicates are ignored.
      */
-    void insert( const Comparable & x )
+    BinaryNode* insert( const Comparable & x )
     {
-        insert( x, root, nullptr );
+        return insert( x, root, nullptr );
     }
      
     /**
      * Insert x into the tree; duplicates are ignored.
      */
-    void insert( Comparable && x )
+    BinaryNode* insert( Comparable && x )
     {
-        insert( std::move( x ), root, nullptr );
+        return insert( std::move( x ), root, nullptr );
     }
     
     /**
@@ -140,7 +141,7 @@ class BinarySearchTree
     }
 
 
-  private:
+public:
     struct BinaryNode
     {
         Comparable element;
@@ -157,23 +158,30 @@ class BinarySearchTree
 
     BinaryNode *root;
 
-
+private:
     /**
      * Internal method to insert into a subtree.
      * x is the item to insert.
      * t is the node that roots the subtree.
      * Set the new root of the subtree.
      */
-    void insert( const Comparable & x, BinaryNode * & t, BinaryNode * p )
+    BinaryNode* insert( const Comparable & x, BinaryNode * & t, BinaryNode * p )
     {
-        if( t == nullptr )
+        if( t == nullptr ){
             t = new BinaryNode{ x, nullptr, nullptr, p};
+            return t;
+        }
         else if( x < t->element )
-            insert( x, t->left, t);
+        {
+            return insert( x, t->left, t);
+        }
         else if( t->element < x )
-            insert( x, t->right, t);
+        {
+            return insert( x, t->right, t);
+        }
         else
             ;  // Duplicate; do nothing
+        return nullptr;
     }
     
     /**
@@ -182,14 +190,18 @@ class BinarySearchTree
      * t is the node that roots the subtree.
      * Set the new root of the subtree.
      */
-    void insert( Comparable && x, BinaryNode * & t, BinaryNode * p)
+    BinaryNode* insert( Comparable && x, BinaryNode * & t, BinaryNode * p)
     {
-        if( t == nullptr )
+        if( t == nullptr ){
             t = new BinaryNode{ std::move( x ), nullptr, nullptr, p};
-        else if( x < t->element )
-            insert( std::move( x ), t->left, t );
-        else if( t->element < x )
-            insert( std::move( x ), t->right, t );
+            return t;
+        }
+        else if( x < t->element ){
+            return insert( std::move( x ), t->left, t );
+        }
+        else if( t->element < x ){
+            return insert( std::move( x ), t->right, t );
+        }
         else
             ;  // Duplicate; do nothing
     }
@@ -318,7 +330,7 @@ class BinarySearchTree
 };
 
 template<class Object>
-class set
+class Set
 {
 public:
     class const_iterator{
@@ -328,11 +340,12 @@ public:
     public:
         const_iterator& operator++()
         {
-            BinaryNode* t;
+            if(m_current == nullptr) return *this;
+            BinaryNode* t = nullptr;
             if(m_current->right != nullptr)
             {
                 t = m_current->right;
-                while(t->left == nullptr){t = t->left;}
+                while(t->left != nullptr){t = t->left;}
                 m_current = t;
             }
             else
@@ -341,7 +354,7 @@ public:
                 while(t != nullptr && t->element < m_current->element){ t = t->parent;}
                 m_current = t;
             }
-            return m_current;//当m_current 为空时没有找到对应的元素
+            return *this;//当m_current 为空时没有找到对应的元素
         }
 
         const_iterator operator++( int )
@@ -353,11 +366,12 @@ public:
 
         const_iterator& operator--()
         {
-             BinaryNode* t;
+            if(m_current == nullptr) return *this;
+             BinaryNode* t = nullptr;
             if(m_current->left != nullptr)
             {
                 t = m_current->left;
-                while(t->right == nullptr){t = t->right;}
+                while(t->right != nullptr){t = t->right;}
                 m_current = t;
             }
             else
@@ -378,12 +392,12 @@ public:
 
         bool operator == (const const_iterator& rhs)
         {
-            return m_current == rhs->m_current;
+            return m_current == rhs.m_current;
         }
 
         bool operator != (const const_iterator& rhs)
         {
-            return m_current != rhs->m_current;
+            return m_current != rhs.m_current;
         }
 
         Object& operator* ()
@@ -391,7 +405,7 @@ public:
 
 
     protected:
-        const_iterator(BinaryNode *p): m_current(p)
+        const_iterator(BinaryNode* p): m_current(p)
         {}
 
         Object& retrieve()
@@ -413,6 +427,7 @@ public:
 
         iterator& operator++()
         {
+            if(m_current == nullptr) return *this;
             BinaryNode* t;
             if(m_current->right != nullptr)
             {
@@ -438,6 +453,7 @@ public:
 
         iterator& operator--()
         {
+            if(m_current == nullptr) return *this;
              BinaryNode* t;
             if(m_current->left != nullptr)
             {
@@ -481,6 +497,30 @@ public:
     private:
         BinaryNode* m_current;
     };
+public:
+    iterator insert(const Object& ele){
+        return m_BinarySearchTree.insert(ele);
+    }
+
+    const_iterator begin() const
+    {
+        return m_BinarySearchTree.root;
+    }
+
+    iterator begin()
+    {
+        return m_BinarySearchTree.root;
+    }
+
+    const_iterator end() const
+    {
+        return const_iterator(nullptr);
+    }
+
+    iterator end()
+    {
+        return iterator(nullptr);
+    }
     
 private:
     BinarySearchTree<Object> m_BinarySearchTree;
@@ -489,5 +529,26 @@ private:
 
 
 int main(){
+    Set<int> temp;
+    temp.insert(10);
+    temp.insert(11);
 
+    Set<int>::const_iterator itr = temp.begin();
+    Set<int>::const_iterator itr1 = temp.end();
+    while(itr != itr1){
+        cout << "ele:"<< *itr++ << endl;
+    }
+    // cout << "set print " << endl;
+    // itr++;
+    // cout << "set print23 " << endl;
+    // cout << *itr << endl;
+    // cout << "set print24 " << endl;
+    // cout << "set print " << endl;
+    // itr++;
+    // cout << "set print23 " << endl;
+    // cout << *itr << endl;
+    // cout << "set print24 " << endl;
+    // while(itr++ != temp.end()){
+    //     cout << *itr << endl;
+    // }
 }
