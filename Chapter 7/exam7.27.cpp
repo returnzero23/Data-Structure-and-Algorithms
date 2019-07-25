@@ -84,3 +84,5 @@ void quicksort( vector<Comparable> & a, int left, int right , int depth)
     else  // Do an insertion sort on the subarray
         heapsort( a, left, right );
 }
+
+b: 快速排序最坏的情况是每次都选到最大值，所以递归depth次，还有 N-depth 个元素需要排序，堆排序的复杂度是O(NlogN)，所以为O((N-depth)log(N-depth)),当depth为固定的常数是，最坏的情况为O(NlogN)
